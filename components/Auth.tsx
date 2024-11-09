@@ -1,3 +1,4 @@
+import { supabase } from '@/utils/supabase';
 import {
   GoogleSignin,
   GoogleSigninButton,
@@ -6,8 +7,9 @@ import {
 
 export default function () {
   GoogleSignin.configure({
-    scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-    webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
+    scopes: ['email', 'profile'],
+    iosClientId: process.env.EXPO_PUBLIC_ANDROID_GOOGLE_CLIENT_ID,
+    webClientId: process.env.EXPO_PUBLIC_WEB_GOOGLE_CLIENT_ID,
   });
 
   return (
@@ -17,9 +19,19 @@ export default function () {
       onPress={async () => {
         try {
           await GoogleSignin.hasPlayServices();
+
           const userInfo = await GoogleSignin.signIn();
-          console.log(JSON.stringify(userInfo, null, 2));
+          if (userInfo.type !== 'success')
+            throw new Error('Google Sign In failed');
+
+          const { data, error } = await supabase.auth.signInWithIdToken({
+            provider: 'google',
+            token: userInfo.data.idToken as string,
+          });
+
+          console.log(data);
         } catch (error) {
+          console.log(error);
           if (error.code === statusCodes.SIGN_IN_CANCELLED) {
             // user cancelled the login flow
           } else if (error.code === statusCodes.IN_PROGRESS) {
