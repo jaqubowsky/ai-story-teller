@@ -31,6 +31,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "725e7ac1-9453-4eed-945e-68fcd8f501b0"
+      }
+    },
+    "owner": "jaqubowsky"
   }
 }
