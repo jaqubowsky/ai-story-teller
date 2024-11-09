@@ -2,7 +2,7 @@ import Auth from '@/components/Auth';
 import { BookOpen } from 'lucide-react-native';
 import { StatusBar, Text, View } from 'react-native';
 
-export default function Index() {
+export default function SignIn() {
   return (
     <View className="flex-1 justify-center items-center bg-pink-500">
       <View className="flex gap-3 flex-col items-center justify-center">

@@ -1,10 +1,11 @@
 import '@/assets/styles/global.css';
-import { Stack } from 'expo-router';
+import { SessionProvider } from '@/providers/session/session-provider';
+import { Slot } from 'expo-router';
 
 export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" />
-    </Stack>
+    <SessionProvider>
+      <Slot />
+    </SessionProvider>
   );
 }

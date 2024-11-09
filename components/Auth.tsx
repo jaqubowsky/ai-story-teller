@@ -1,9 +1,12 @@
 import { supabase } from '@/lib/supabase';
+import { useSession } from '@/providers/session/session-provider';
 import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import { router } from 'expo-router';
+import { Alert } from 'react-native';
 
 export default function () {
   GoogleSignin.configure({
@@ -11,6 +14,8 @@ export default function () {
     iosClientId: process.env.EXPO_PUBLIC_ANDROID_GOOGLE_CLIENT_ID,
     webClientId: process.env.EXPO_PUBLIC_WEB_GOOGLE_CLIENT_ID,
   });
+
+  const { setIsLoggedIn } = useSession();
 
   return (
     <GoogleSigninButton
@@ -21,26 +26,36 @@ export default function () {
           await GoogleSignin.hasPlayServices();
 
           const userInfo = await GoogleSignin.signIn();
-          if (userInfo.type !== 'success')
+          if (userInfo.type !== 'success') {
             throw new Error('Google Sign In failed');
+          }
 
-          const { data, error } = await supabase.auth.signInWithIdToken({
+          const { error } = await supabase.auth.signInWithIdToken({
             provider: 'google',
             token: userInfo.data.idToken as string,
           });
+          if (error) throw error;
 
-          console.log(data);
+          setIsLoggedIn(true);
+          router.replace('/');
         } catch (error) {
           console.log(error);
-          if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-            // user cancelled the login flow
-          } else if (error.code === statusCodes.IN_PROGRESS) {
-            // operation (e.g. sign in) is in progress already
-          } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-            // play services not available or outdated
-          } else {
-            // some other error happened
+          let errorMessage = 'An unexpected error occurred. Please try again.';
+
+          if (error instanceof Error) {
+            errorMessage = error.message;
+          } else if (error instanceof Object && 'code' in error) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+              errorMessage = 'Sign in was cancelled. Please try again.';
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+              errorMessage =
+                'Sign in is already in progress. Please try again.';
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+              errorMessage =
+                'Google Play Services are not available or outdated. Please try again.';
+            }
           }
+          Alert.alert('Error', errorMessage);
         }
       }}
     />
