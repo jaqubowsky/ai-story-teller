@@ -1,8 +1,15 @@
-import Auth from '@/components/Auth';
+import Auth from '@/features/auth/auth';
+import { useSession } from '@/providers/session/session-provider';
+import { Redirect } from 'expo-router';
 import { BookOpen } from 'lucide-react-native';
-import { StatusBar, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 export default function SignIn() {
+  const { isLoading, isLoggedIn } = useSession();
+
+  if (isLoading) return <Text>Loading...</Text>;
+  if (isLoggedIn) return <Redirect href="/" />;
+
   return (
     <View className="flex-1 justify-center items-center bg-pink-500">
       <View className="flex gap-3 flex-col items-center justify-center">
@@ -13,7 +20,6 @@ export default function SignIn() {
         </Text>
       </View>
       <Auth />
-      <StatusBar barStyle="light-content" />
     </View>
   );
 }

@@ -1,12 +1,12 @@
 import { useSession } from '@/providers/session/session-provider';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Redirect, Tabs } from 'expo-router';
-import { Library, LogOutIcon } from 'lucide-react-native';
-import { Text } from 'react-native';
+import { LayoutDashboard, Library } from 'lucide-react-native';
 
 export default function AppLayout() {
-  const { isLoading, isLoggedIn, signOut } = useSession();
+  const { isLoading, isLoggedIn } = useSession();
 
-  if (isLoading) return <Text>Loading...</Text>;
+  if (isLoading) return <LinearGradient colors={['#a855f7', '#ec4899']} />;
   if (!isLoggedIn) return <Redirect href="/sign-in" />;
 
   return (
@@ -19,23 +19,23 @@ export default function AppLayout() {
           position: 'absolute',
           bottom: 0,
         },
+        headerShown: false,
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: 'gray',
-        headerStyle: {
-          backgroundColor: 'white',
-        },
-        headerRight: () => (
-          <LogOutIcon onPress={signOut} size={24} color="black" />
-        ),
-        headerRightContainerStyle: {
-          paddingStart: 20,
-        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: 'Dashboard',
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color }) => <LayoutDashboard color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="stories"
+        options={{
+          title: 'Stories',
           tabBarShowLabel: false,
           tabBarIcon: ({ color }) => <Library color={color} />,
         }}
