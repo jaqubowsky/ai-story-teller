@@ -1,4 +1,5 @@
-import { LinearGradient } from 'expo-linear-gradient';
+import Background from '@/shared/components/background';
+import { Link } from 'expo-router';
 import { WandIcon } from 'lucide-react-native';
 import React from 'react';
 import {
@@ -12,7 +13,7 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 
 export default function HomeScreen() {
   return (
-    <LinearGradient colors={['#a855f7', '#ec4899']} className="flex-1">
+    <Background>
       <SafeAreaView className="flex-1">
         <ScrollView
           contentContainerStyle={{
@@ -36,14 +37,17 @@ export default function HomeScreen() {
             <Animated.View entering={FadeIn.duration(2000)}>
               <TouchableOpacity className="bg-white flex-row items-center py-3 px-6 rounded-full">
                 <WandIcon size={24} color="black" />
-                <Text className="text-black font-bold text-lg ml-2">
-                  Start Your Story
-                </Text>
+                <Link
+                  className="text-black font-bold text-lg ml-2"
+                  href="./create-character-modal"
+                >
+                  Create your first character
+                </Link>
               </TouchableOpacity>
             </Animated.View>
           </View>
         </ScrollView>
       </SafeAreaView>
-    </LinearGradient>
+    </Background>
   );
 }

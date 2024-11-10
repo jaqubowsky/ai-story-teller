@@ -1,5 +1,5 @@
 import StoryPreview from '@/features/stories/components/story-preview';
-import { LinearGradient } from 'expo-linear-gradient';
+import Background from '@/shared/components/background';
 import { WandIcon } from 'lucide-react-native';
 import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
@@ -22,7 +22,7 @@ const stories = [
 
 export default function StoriesScreen() {
   return (
-    <LinearGradient colors={['#a855f7', '#ec4899']} className="flex-1">
+    <Background>
       <View className="mb-4">
         <View className="flex-row items-center mb-4 justify-center gap-2">
           <WandIcon size={32} color="white" />
@@ -43,6 +43,6 @@ export default function StoriesScreen() {
           </Reanimated.View>
         </ScrollView>
       </View>
-    </LinearGradient>
+    </Background>
   );
 }
