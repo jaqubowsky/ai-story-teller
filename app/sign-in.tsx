@@ -1,13 +1,12 @@
-import Auth from '@/features/auth/auth';
+import Auth from '@/features/auth';
 import { useSession } from '@/providers/session/session-provider';
 import { Redirect } from 'expo-router';
 import { BookOpen } from 'lucide-react-native';
 import { Text, View } from 'react-native';
 
 export default function SignIn() {
-  const { isLoading, isLoggedIn } = useSession();
+  const { isLoggedIn } = useSession();
 
-  if (isLoading) return <Text>Loading...</Text>;
   if (isLoggedIn) return <Redirect href="/" />;
 
   return (

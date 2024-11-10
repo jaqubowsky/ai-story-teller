@@ -1,5 +1,5 @@
-import { supabase } from '@/lib/supabase';
 import { useSession } from '@/providers/session/session-provider';
+import { supabase } from '@/shared/lib/supabase';
 import {
   GoogleSignin,
   GoogleSigninButton,
@@ -39,7 +39,6 @@ export default function () {
           setIsLoggedIn(true);
           router.replace('/');
         } catch (error) {
-          console.log(error);
           let errorMessage = 'An unexpected error occurred. Please try again.';
 
           if (error instanceof Error) {
