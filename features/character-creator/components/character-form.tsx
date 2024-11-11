@@ -1,16 +1,30 @@
 import Button from '@/shared/components/button';
 import { cn } from '@/shared/lib/twMerge';
-import { useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { router } from 'expo-router';
+import { Controller, useForm } from 'react-hook-form';
+import { Alert, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  createCharacterSchema,
+  createCharacterType,
+} from '../schemas/create-character-schema';
+import { createCharacter } from '../server/create-character';
 
 const CharacterForm = () => {
-  const [name, setName] = useState('');
-  const [age, setAge] = useState('');
-  const [interests, setInterests] = useState('');
-  const [gender, setGender] = useState('');
+  const { control, handleSubmit, reset } = useForm({
+    resolver: zodResolver(createCharacterSchema),
+  });
 
-  const handleSave = () => {
-    console.log({ name, age, interests, gender });
+  const onSubmit = async (data: createCharacterType) => {
+    const { success, message } = await createCharacter(data);
+    const alertType = success ? 'Success' : 'Error';
+
+    if (success) {
+      reset();
+      router.push('..');
+    }
+
+    Alert.alert(alertType, message);
   };
 
   return (
@@ -18,77 +32,100 @@ const CharacterForm = () => {
       <Text className="text-base text-white self-start mb-1">
         Character name
       </Text>
-      <TextInput
-        className="bg-white p-3 rounded-md mb-4 w-full"
-        placeholder="Character name"
-        value={name}
-        onChangeText={setName}
+      <Controller
+        control={control}
+        name="name"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            className="bg-white p-3 rounded-md mb-4 w-full"
+            placeholder="Character name"
+            value={value}
+            onChangeText={onChange}
+          />
+        )}
       />
 
       <Text className="text-base text-white self-start mb-1">Age</Text>
-
-      <TextInput
-        className="bg-white p-3 rounded-md mb-4 w-full"
-        placeholder="Enter age ( optional )"
-        value={age}
-        onChangeText={setAge}
-        keyboardType="numeric"
+      <Controller
+        control={control}
+        name="age"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            className="bg-white p-3 rounded-md mb-4 w-full"
+            placeholder="Enter age ( optional )"
+            value={value ? value.toString() : ''}
+            onChangeText={onChange}
+            keyboardType="numeric"
+          />
+        )}
       />
 
       <Text className="text-base text-white self-start mb-1">Interests</Text>
       <Text className="text-xs text-white self-start mb-4">
         Enter what your character likes to do
       </Text>
-
-      <TextInput
-        className="bg-white p-3 rounded-md mb-4 w-full"
-        placeholder="Games, drawing, reading, etc."
-        value={interests}
-        onChangeText={setInterests}
+      <Controller
+        control={control}
+        name="interests"
+        render={({ field: { onChange, value } }) => (
+          <TextInput
+            className="bg-white p-3 rounded-md mb-4 w-full"
+            placeholder="Games, drawing, reading, etc."
+            value={value}
+            onChangeText={onChange}
+          />
+        )}
       />
 
       <Text className="text-base text-white self-start mb-1">Gender</Text>
       <Text className="text-xs text-white self-start mb-4">
         It will help us to generate a better story
       </Text>
-
       <View className="flex-row justify-between mb-4 w-full">
-        <TouchableOpacity
-          className={cn('flex-1 p-3 rounded-md', {
-            'bg-pink-500': gender === 'male',
-            'bg-white': gender !== 'male',
-          })}
-          onPress={() => setGender('male')}
-        >
-          <Text
-            className={cn('text-center', {
-              'text-white': gender === 'male',
-              'text-black': gender !== 'male',
-            })}
-          >
-            Male
-          </Text>
-        </TouchableOpacity>
+        <Controller
+          control={control}
+          name="gender"
+          render={({ field: { onChange, value } }) => (
+            <>
+              <TouchableOpacity
+                className={cn('flex-1 p-3 rounded-md', {
+                  'bg-pink-500': value === 'male',
+                  'bg-white': value !== 'male',
+                })}
+                onPress={() => onChange('male')}
+              >
+                <Text
+                  className={cn('text-center', {
+                    'text-white': value === 'male',
+                    'text-black': value !== 'male',
+                  })}
+                >
+                  Male
+                </Text>
+              </TouchableOpacity>
 
-        <TouchableOpacity
-          className={cn('flex-1 p-3 rounded-md ml-2', {
-            'bg-pink-500': gender === 'female',
-            'bg-white': gender !== 'female',
-          })}
-          onPress={() => setGender('female')}
-        >
-          <Text
-            className={cn('text-center', {
-              'text-white': gender === 'female',
-              'text-black': gender !== 'female',
-            })}
-          >
-            Female
-          </Text>
-        </TouchableOpacity>
+              <TouchableOpacity
+                className={cn('flex-1 p-3 rounded-md ml-2', {
+                  'bg-pink-500': value === 'female',
+                  'bg-white': value !== 'female',
+                })}
+                onPress={() => onChange('female')}
+              >
+                <Text
+                  className={cn('text-center', {
+                    'text-white': value === 'female',
+                    'text-black': value !== 'female',
+                  })}
+                >
+                  Female
+                </Text>
+              </TouchableOpacity>
+            </>
+          )}
+        />
       </View>
 
-      <Button title="Save" onPress={handleSave} />
+      <Button title="Create" onPress={handleSubmit(onSubmit)} />
     </View>
   );
 };
