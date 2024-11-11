@@ -17,7 +17,7 @@ const Background = ({
   return (
     <LinearGradient
       colors={colors ? colors : ['#7e3ea1', '#b83265']}
-      className={cn('flex-1', className)}
+      className={cn('flex-1 px-3 py-6', className)}
       {...props}
     >
       {children}

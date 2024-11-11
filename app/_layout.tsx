@@ -4,15 +4,20 @@ import {
   useSession,
 } from '@/providers/session/session-provider';
 import Loading from '@/shared/components/loading';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Link, Stack } from 'expo-router';
 import { BookOpen } from 'lucide-react-native';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 export default function RootLayout() {
+  const queryClient = new QueryClient();
+
   return (
-    <SessionProvider>
-      <AppScreens />
-    </SessionProvider>
+    <QueryClientProvider client={queryClient}>
+      <SessionProvider>
+        <AppScreens />
+      </SessionProvider>
+    </QueryClientProvider>
   );
 }
 

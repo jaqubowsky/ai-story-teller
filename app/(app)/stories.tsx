@@ -23,26 +23,24 @@ const stories = [
 export default function StoriesScreen() {
   return (
     <Background>
-      <View className="mb-4">
-        <View className="flex-row items-center mb-4 justify-center gap-2">
-          <WandIcon size={32} color="white" />
-          <Text className="text-3xl px-4 pt-4 font-bold text-white">
-            Your Magical Stories
-          </Text>
-        </View>
-        <ScrollView
-          contentContainerStyle={{ paddingHorizontal: 12, paddingBottom: 60 }}
-        >
-          <Reanimated.View
-            className="flex-row flex-wrap justify-between gap-2"
-            entering={FadeIn.duration(1000)}
-          >
-            {stories.map((story, index) => (
-              <StoryPreview key={index} story={story} />
-            ))}
-          </Reanimated.View>
-        </ScrollView>
+      <View className="flex-row items-center mb-4 justify-center gap-2">
+        <WandIcon size={32} color="white" />
+        <Text className="text-3xl px-4 pt-4 font-bold text-white">
+          Your Magical Stories
+        </Text>
       </View>
+      <ScrollView
+        contentContainerStyle={{ paddingHorizontal: 12, paddingBottom: 60 }}
+      >
+        <Reanimated.View
+          className="flex-row flex-wrap justify-between gap-2"
+          entering={FadeIn.duration(1000)}
+        >
+          {stories.map((story, index) => (
+            <StoryPreview key={index} story={story} />
+          ))}
+        </Reanimated.View>
+      </ScrollView>
     </Background>
   );
 }

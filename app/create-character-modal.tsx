@@ -1,4 +1,4 @@
-import CharacterForm from '@/features/character-creator/components/character-form';
+import CharacterForm from '@/features/characters/components/character-form';
 import { useSession } from '@/providers/session/session-provider';
 import Background from '@/shared/components/background';
 import { Redirect } from 'expo-router';

@@ -6,6 +6,7 @@ type ButtonProps = {
   icon?: ReactNode;
   title: string;
   variant?: 'primary' | 'secondary';
+  size?: 'small' | 'medium' | 'large';
 } & TouchableOpacityProps;
 
 const variatns = {
@@ -13,17 +14,27 @@ const variatns = {
   secondary: 'bg-gray-500',
 };
 
+const sizes = {
+  small: 'px-1 py-2',
+  medium: 'px-2 py-4',
+  large: 'px-3 py-6',
+};
+
 const Button = ({
   icon,
   title,
+  className,
   variant = 'primary',
+  size = 'medium',
   ...props
 }: ButtonProps) => {
   return (
     <TouchableOpacity
       className={cn(
-        'px-2 py-4 rounded-md flex-row items-center justify-center w-full',
-        variatns[variant]
+        sizes[size],
+        'rounded-md flex-row gap-3 items-center justify-center w-full',
+        variatns[variant],
+        className
       )}
       {...props}
     >
@@ -32,5 +43,7 @@ const Button = ({
     </TouchableOpacity>
   );
 };
+
+// ... existing code ...
 
 export default Button;

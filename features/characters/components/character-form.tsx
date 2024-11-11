@@ -4,25 +4,34 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { router } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import { Alert, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useCreateCharacter } from '../mutations/characters';
 import {
   createCharacterSchema,
   createCharacterType,
 } from '../schemas/create-character-schema';
-import { createCharacter } from '../server/create-character';
 
 const CharacterForm = () => {
+  const {
+    data: mutationData,
+    mutate: createCharacter,
+    error,
+    isSuccess,
+  } = useCreateCharacter();
+
   const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(createCharacterSchema),
   });
 
   const onSubmit = async (data: createCharacterType) => {
-    const { success, message } = await createCharacter(data);
-    const alertType = success ? 'Success' : 'Error';
+    createCharacter(data);
+    const alertType = isSuccess ? 'Success' : 'Error';
 
-    if (success) {
+    if (isSuccess) {
       reset();
       router.push('..');
     }
+
+    const message = mutationData?.message || error?.message;
 
     Alert.alert(alertType, message);
   };
