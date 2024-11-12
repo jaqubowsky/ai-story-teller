@@ -1,4 +1,5 @@
 import { supabase } from '@/shared/lib/supabase';
+import { Character } from '@/shared/types/characters';
 import {
   createCharacterSchema,
   createCharacterType,
@@ -22,7 +23,10 @@ export const createCharacter = async (unsafeData: createCharacterType) => {
   };
 };
 
-export const getCharacters = async () => {
+export const getCharacters = async (): Promise<{
+  data: Character[] | [];
+  message: string;
+}> => {
   const { data: sessionData } = await supabase.auth.getSession();
   if (!sessionData.session) throw new Error('User not authenticated');
 

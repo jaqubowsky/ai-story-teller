@@ -15,5 +15,6 @@ export const useGetCharacters = () => {
   return useQuery({
     queryKey: [mutationKeys.GET_CHARACTERS],
     queryFn: async () => getCharacters(),
+    initialData: { data: [], message: '' },
   });
 };

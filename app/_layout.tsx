@@ -59,6 +59,14 @@ function AppScreens() {
         }}
       />
       <Stack.Screen
+        name="create-story-modal"
+        options={{
+          presentation: 'modal',
+          animation: 'fade_from_bottom',
+          headerTitle: 'Create Story',
+        }}
+      />
+      <Stack.Screen
         name="sign-in"
         options={{ title: 'Sign In', headerShown: false }}
       />

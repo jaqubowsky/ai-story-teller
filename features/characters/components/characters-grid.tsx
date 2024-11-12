@@ -1,3 +1,4 @@
+import useStoryStore from '@/shared/stores/story-generator-store';
 import { type Character as CharacterType } from '@/shared/types/characters';
 import { router } from 'expo-router';
 import React from 'react';
@@ -6,22 +7,19 @@ import Character from './character';
 import DummyCharacter from './dummy-character';
 
 type CharactersGridProps = {
-  characters: CharacterType[] | [];
-  selectedChars: Pick<CharacterType, 'id'>[];
-  setSelectedChars: (chars: Pick<CharacterType, 'id'>[]) => void;
+  characters: CharacterType[];
 };
 
-const CharactersGrid = ({
-  characters,
-  setSelectedChars,
-  selectedChars,
-}: CharactersGridProps) => {
+const CharactersGrid = ({ characters }: CharactersGridProps) => {
+  const { selectedChars, setSelectedChars } = useStoryStore();
+
   const handleSelect = (id: string) => {
-    if (selectedChars.some((char) => char.id === id)) {
-      setSelectedChars(selectedChars.filter((char) => char.id !== id));
-    } else {
-      setSelectedChars([...selectedChars, { id }]);
-    }
+    const isSelected = selectedChars.some((char) => char.id === id);
+    setSelectedChars(
+      isSelected
+        ? selectedChars.filter((char) => char.id !== id)
+        : [...selectedChars, { id }]
+    );
   };
 
   const isActive = (id: string) =>

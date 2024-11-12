@@ -32,7 +32,7 @@ const Button = ({
     <TouchableOpacity
       className={cn(
         sizes[size],
-        'rounded-md flex-row gap-3 items-center justify-center w-full',
+        'rounded-md flex-row gap-3 items-center justify-center w-full disabled:opacity-50',
         variatns[variant],
         className
       )}
