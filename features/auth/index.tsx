@@ -1,5 +1,5 @@
 import { useSession } from '@/providers/session/session-provider';
-import { supabase } from '@/shared/lib/supabase';
+import { supabase } from '@/supabase';
 import {
   GoogleSignin,
   GoogleSigninButton,

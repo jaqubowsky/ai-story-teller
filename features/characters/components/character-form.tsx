@@ -11,29 +11,26 @@ import {
 } from '../schemas/create-character-schema';
 
 const CharacterForm = () => {
-  const {
-    data: mutationData,
-    mutate: createCharacter,
-    error,
-    isSuccess,
-  } = useCreateCharacter();
+  const { mutate: createCharacter } = useCreateCharacter();
 
   const { control, handleSubmit, reset } = useForm({
     resolver: zodResolver(createCharacterSchema),
   });
 
   const onSubmit = async (data: createCharacterType) => {
-    createCharacter(data);
-    const alertType = isSuccess ? 'Success' : 'Error';
-
-    if (isSuccess) {
-      reset();
-      router.push('..');
-    }
-
-    const message = mutationData?.message || error?.message;
-
-    Alert.alert(alertType, message);
+    createCharacter(data, {
+      onSuccess: (mutationData) => {
+        reset();
+        router.push('..');
+        Alert.alert(
+          'Success',
+          mutationData?.message || 'Character created successfully'
+        );
+      },
+      onError: (error) => {
+        Alert.alert('Error', error?.message || 'An error occurred');
+      },
+    });
   };
 
   return (

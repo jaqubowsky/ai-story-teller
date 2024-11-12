@@ -1,4 +1,4 @@
-import { supabase } from '@/shared/lib/supabase';
+import { supabase } from '@/supabase';
 import * as SecureStore from 'expo-secure-store';
 import {
   ReactNode,

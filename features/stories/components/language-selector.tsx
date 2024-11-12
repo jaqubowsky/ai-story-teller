@@ -24,8 +24,8 @@ const LanguageSelector = ({ disabled }: LanguageSelectorProps) => {
         onPress={toggleModal}
         className={cn(
           'bg-purple-500',
-          'rounded-md flex-row gap-3 items-center justify-center w-12 h-12 disabled:opacity-50',
-          'px-4 py-3'
+          'rounded-md flex-row gap-3 items-center justify-center w-16 h-11 disabled:opacity-50',
+          'px-4 py-2'
         )}
       >
         <Text className="font-bold text-white">{language?.toUpperCase()}</Text>
@@ -66,7 +66,6 @@ const LanguageSelector = ({ disabled }: LanguageSelectorProps) => {
               onPress={toggleModal}
               variant="secondary"
               title="Close"
-              className="pt-10"
               style={{ marginTop: 17 }}
             />
           </View>

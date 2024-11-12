@@ -1,13 +1,20 @@
 import { mutationKeys } from '@/data/mutation-keys';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createCharacterType } from '../schemas/create-character-schema';
 import { createCharacter, getCharacters } from '../server/characters';
 
 export const useCreateCharacter = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: [mutationKeys.CREATE_CHARACTER],
     mutationFn: async (unsafeData: createCharacterType) =>
-      createCharacter(unsafeData),
+      await createCharacter(unsafeData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [mutationKeys.GET_CHARACTERS],
+      });
+    },
   });
 };
 

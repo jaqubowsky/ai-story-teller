@@ -18,24 +18,24 @@ export default function HomeScreen() {
   return (
     <Background>
       {!isLoading && !data.data.length && (
-        <>
-          <Animated.View entering={FadeIn.duration(1000)}>
+        <View className="h-full items-center justify-center">
+          <Animated.View
+            entering={FadeIn.duration(1000)}
+            className="flex-col items-center justify-center"
+          >
             <Text className="text-2xl font-bold text-white mb-2">
               Let's Create Magic!
             </Text>
           </Animated.View>
-          <Animated.View entering={FadeIn.duration(1500)}>
+          <Animated.View
+            entering={FadeIn.duration(1500)}
+            className="flex-col items-center justify-center"
+          >
             <Text className="text-lg text-white mb-4">
               Your amazing story adventure begins here!
             </Text>
           </Animated.View>
-        </>
-      )}
-      <Animated.View entering={FadeIn.duration(2000)}>
-        {isLoading && !data.data.length ? (
-          <ActivityIndicator color="#a855f7" />
-        ) : null}
-        {!isLoading && !data.data.length ? (
+
           <View className="flex-col items-center justify-center gap-2">
             <TouchableOpacity className="bg-white flex-row items-center py-3 px-6 rounded-full">
               <WandIcon size={24} color="black" />
@@ -47,13 +47,19 @@ export default function HomeScreen() {
               </Link>
             </TouchableOpacity>
           </View>
-        ) : (
+        </View>
+      )}
+      <Animated.View entering={FadeIn.duration(2000)}>
+        {isLoading && !data.data.length ? (
+          <ActivityIndicator color="#a855f7" />
+        ) : null}
+        {!isLoading && data.data.length ? (
           <View className="flex-col gap-2 ">
             <Text className="text-white text-base font-bold mb-4 ml-3">
               Select characters to start your story:
             </Text>
             <CharactersGrid characters={data.data} />
-            <View className="flex-row gap-2 items-center justify-center px-6">
+            <View className="flex-row gap-2 items-center justify-center px-10">
               <LanguageSelector
                 disabled={!data.data.length || !selectedChars.length}
               />
@@ -67,7 +73,7 @@ export default function HomeScreen() {
               />
             </View>
           </View>
-        )}
+        ) : null}
       </Animated.View>
     </Background>
   );

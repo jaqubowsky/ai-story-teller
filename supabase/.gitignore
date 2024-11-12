@@ -1,0 +1,8 @@
+# Supabase
+.branches
+.temp
+.env
+migrations
+config.toml
+dump-data.sql
+functions

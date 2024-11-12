@@ -1,5 +1,5 @@
-import { supabase } from '@/shared/lib/supabase';
 import { Character } from '@/shared/types/characters';
+import { supabase } from '@/supabase';
 import {
   createCharacterSchema,
   createCharacterType,
