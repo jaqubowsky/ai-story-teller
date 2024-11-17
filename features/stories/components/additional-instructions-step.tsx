@@ -1,9 +1,7 @@
 import Button from '@/shared/components/button';
-import { UseFormReturn } from 'react-hook-form';
+import { Controller, UseFormReturn } from 'react-hook-form';
 import { Text, TextInput, View } from 'react-native';
-import {
-  createStoryTypeForm
-} from '../schemas/create-story-schema';
+import { createStoryTypeForm } from '../schemas/create-story-schema';
 
 type AdditionalInstructionsStepProps = {
   form: UseFormReturn<createStoryTypeForm>;
@@ -19,11 +17,17 @@ const AdditionalInstructionsStep = ({
       <Text className="text-white text-base font-bold mb-4 ml-3">
         Add additional instructions:
       </Text>
-      <TextInput
-        {...form.register('additionalInstructions')}
-        placeholder="Type your instructions here..."
-        className="bg-white text-black p-4 rounded-lg"
-        multiline
+      <Controller
+        control={form.control}
+        name="additionalInstructions"
+        render={({ field }) => (
+          <TextInput
+            {...field}
+            placeholder="Type your instructions here..."
+            className="bg-white text-black p-4 rounded-lg"
+            multiline
+          />
+        )}
       />
       {form.formState.errors.additionalInstructions && (
         <Text className="text-red-500">

@@ -4,6 +4,7 @@ import { useCreateStory } from '@/features/stories/mutations/story';
 import {
   createStoryFormSchema,
   createStoryType,
+  createStoryTypeForm,
 } from '@/features/stories/schemas/create-story-schema';
 import { useSession } from '@/providers/session/session-provider';
 import Background from '@/shared/components/background';
@@ -26,17 +27,23 @@ export default function CreateStoryModal() {
   if (!isLoggedIn) return <Redirect href="/sign-in" />;
 
   const { mutate: createStory } = useCreateStory();
-
   const { selectedChars: characters, language } = useStoryStore();
 
   const form = useForm({
     resolver: zodResolver(createStoryFormSchema),
   });
 
-  const onSubmit = async (data: createStoryType) => {
-    createStory(data, {
+  const onSubmit = async (data: createStoryTypeForm) => {
+    const completeData = {
+      ...data,
+      characters,
+      language,
+    } as createStoryType;
+
+    createStory(completeData, {
       onSuccess: (mutationData) => {
-        router.push('..');
+        form.reset();
+        router.push('/stories');
         Alert.alert(
           'Success',
           mutationData?.message || 'Story created successfully'
@@ -57,10 +64,7 @@ export default function CreateStoryModal() {
         />
       )}
       {currentStep === STEPS.ADDITIONAL_INSTRUCTIONS && (
-        <AdditionalInstructionsStep
-          form={form}
-          onSubmit={(data) => onSubmit({ ...data, characters, language })}
-        />
+        <AdditionalInstructionsStep form={form} onSubmit={onSubmit} />
       )}
     </Background>
   );

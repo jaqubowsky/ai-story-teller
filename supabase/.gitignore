@@ -5,4 +5,3 @@
 migrations
 config.toml
 dump-data.sql
-functions

@@ -5,6 +5,8 @@ import {
 } from "../schemas/create-story-schema";
 import { Story } from "../types/story";
 
+const API_URL = process.env.EXPO_PUBLIC_SUPABASE_URL + "/functions/v1";
+
 export const createStory = async (unsafeData: createStoryType) => {
   const { data: sessionData } = await supabase.auth.getSession();
   if (!sessionData.session) throw new Error("User not authenticated");
@@ -13,7 +15,7 @@ export const createStory = async (unsafeData: createStoryType) => {
   if (!success) throw new Error("Invalid data provided. Please try again.");
 
   const response = await fetch(
-    process.env.NEXT_PUBLIC_SUPABASE_URL + "/story",
+    `${API_URL}/story`,
     {
       method: "POST",
       body: JSON.stringify(data),
@@ -26,7 +28,7 @@ export const createStory = async (unsafeData: createStoryType) => {
   if (!response.ok) throw new Error("Error creating story");
 
   return {
-    message: "Story created successfully",
+    message: "Story generation started successfully",
   };
 };
 

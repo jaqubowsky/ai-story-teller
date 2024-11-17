@@ -7,12 +7,12 @@ export const createStorySchema = z.object({
   characters: z.array(createCharacterSchema).min(1),
   storyType: z.enum(STORY_TYPES),
   language: z.enum(LANGUAGES),
-  additionalInstructions: z.string(),
+  additionalInstructions: z.union([z.string(), z.literal('')]).optional(),
 });
 
 export const createStoryFormSchema = z.object({
   storyType: z.enum(STORY_TYPES),
-  additionalInstructions: z.string(),
+  additionalInstructions: z.union([z.string(), z.literal('')]).optional(),
 });
 
 export type createStoryType = z.infer<typeof createStorySchema>;

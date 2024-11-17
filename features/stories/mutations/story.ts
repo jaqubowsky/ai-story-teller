@@ -2,6 +2,7 @@ import { mutationKeys } from "@/data/mutation-keys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createStoryType } from "../schemas/create-story-schema";
 import { createStory, getStories } from "../server/story";
+import { Story } from "../types/story";
 
 export const useCreateStory = () => {
   const queryClient = useQueryClient();
@@ -23,5 +24,6 @@ export const useGetStories = () => {
     queryKey: [mutationKeys.GET_STORIES],
     queryFn: async () => await getStories(),
     initialData: { data: [], message: "" },
+    refetchInterval: (data) => data.state.data?.data.some((story: Story) => story.status === "GENERATING") ? 1000 : false,
   });
 };

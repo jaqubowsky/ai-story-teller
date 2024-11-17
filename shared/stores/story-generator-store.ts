@@ -4,6 +4,7 @@ import { Language } from "../types/languages";
 
 export const LANGUAGES = [
   "en",
+  "pl",
   "es",
   "fr",
   "de",
