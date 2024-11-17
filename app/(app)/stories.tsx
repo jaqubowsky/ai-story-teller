@@ -1,26 +1,14 @@
 import StoryPreview from '@/features/stories/components/story-preview';
+import { useGetStories } from '@/features/stories/mutations/story';
 import Background from '@/shared/components/background';
 import { WandIcon } from 'lucide-react-native';
 import React from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import Reanimated, { FadeIn } from 'react-native-reanimated';
 
-const stories = [
-  { title: 'The Magic Treehouse', image: 'https://via.placeholder.com/100' },
-  { title: 'Space Explorers', image: 'https://via.placeholder.com/100' },
-  { title: "Fairy's Garden", image: 'https://via.placeholder.com/100' },
-  { title: 'Dinosaur Adventure', image: 'https://via.placeholder.com/100' },
-  { title: "Pirate's Treasure", image: 'https://via.placeholder.com/100' },
-  { title: 'Enchanted Forest', image: 'https://via.placeholder.com/100' },
-  { title: 'The Magic Treehouse', image: 'https://via.placeholder.com/100' },
-  { title: 'Space Explorers', image: 'https://via.placeholder.com/100' },
-  { title: "Fairy's Garden", image: 'https://via.placeholder.com/100' },
-  { title: 'Dinosaur Adventure', image: 'https://via.placeholder.com/100' },
-  { title: "Pirate's Treasure", image: 'https://via.placeholder.com/100' },
-  { title: 'Enchanted Forest', image: 'https://via.placeholder.com/100' },
-];
-
 export default function StoriesScreen() {
+  const { data, isLoading } = useGetStories();
+
   return (
     <Background>
       <View className="flex-row items-center mb-4 justify-center gap-2">
@@ -36,9 +24,14 @@ export default function StoriesScreen() {
           className="flex-row flex-wrap justify-between gap-2"
           entering={FadeIn.duration(1000)}
         >
-          {stories.map((story, index) => (
-            <StoryPreview key={index} story={story} />
-          ))}
+          {isLoading && !data.data.length ? (
+            <ActivityIndicator color="#a855f7" />
+          ) : null}
+          {!isLoading && data.data.length
+            ? data.data.map((story, index) => (
+                <StoryPreview {...story} key={index} />
+              ))
+            : null}
         </Reanimated.View>
       </ScrollView>
     </Background>

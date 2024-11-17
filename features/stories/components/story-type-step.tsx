@@ -1,9 +1,10 @@
 import Button from '@/shared/components/button';
 import { cn } from '@/shared/lib/twMerge';
-import useStoryStore from '@/shared/stores/story-generator-store';
+import { Controller, UseFormReturn } from 'react-hook-form';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { createStoryType, createStoryTypeForm } from '../schemas/create-story-schema';
 
-const STORY_TYPES = [
+export const STORY_TYPES = [
   'Adventure',
   'Fantasy',
   'Fairy Tale',
@@ -19,14 +20,15 @@ const STORY_TYPES = [
   'Sports',
   'Pirate',
   'Space',
-];
+] as const;
 
 type StoryTypeStepProps = {
-  onNext: (type: string) => void;
+  form: UseFormReturn<createStoryTypeForm>;
+  onNext: () => void;
 };
 
-const StoryTypeStep = ({ onNext }: StoryTypeStepProps) => {
-  const { selectedType, setSelectedType } = useStoryStore();
+const StoryTypeStep = ({ form, onNext }: StoryTypeStepProps) => {
+  const { control } = form;
 
   return (
     <View className="flex-col gap-4">
@@ -35,27 +37,35 @@ const StoryTypeStep = ({ onNext }: StoryTypeStepProps) => {
       </Text>
       <View className="flex-row flex-wrap gap-2">
         {STORY_TYPES.map((type) => (
-          <TouchableOpacity
+          <Controller
             key={type}
-            onPress={() => setSelectedType(type)}
-            className={cn('bg-white py-2 px-4 rounded-full', {
-              'bg-purple-500': selectedType === type,
-            })}
-          >
-            <Text
-              className={cn('text-black font-bold text-lg', {
-                'text-white': selectedType === type,
-              })}
-            >
-              {type}
-            </Text>
-          </TouchableOpacity>
+            control={control}
+            name="storyType"
+            render={({ field: { onChange } }) => (
+              <TouchableOpacity
+                onPress={() => {
+                  onChange(type);
+                }}
+                className={cn('bg-white py-2 px-4 rounded-full', {
+                  'bg-purple-500': form.getValues('storyType') === type,
+                })}
+              >
+                <Text
+                  className={cn('text-black font-bold text-lg', {
+                    'text-white': form.getValues('storyType') === type,
+                  })}
+                >
+                  {type}
+                </Text>
+              </TouchableOpacity>
+            )}
+          />
         ))}
       </View>
       <Button
-        onPress={() => onNext(selectedType)}
+        onPress={onNext}
         title="Next"
-        disabled={!selectedType}
+        disabled={form.formState.isSubmitting}
       />
     </View>
   );

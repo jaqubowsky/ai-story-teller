@@ -2,7 +2,7 @@ import Background from '@/shared/components/background';
 import Button from '@/shared/components/button';
 import { cn } from '@/shared/lib/twMerge';
 import useStoryStore, {
-  languages,
+  LANGUAGES,
 } from '@/shared/stores/story-generator-store';
 import React, { useState } from 'react';
 import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
@@ -49,14 +49,14 @@ const LanguageSelector = ({ disabled }: LanguageSelectorProps) => {
                 gap: 10,
               }}
             >
-              {Object.keys(languages).map((lang) => (
+              {LANGUAGES.map((lang) => (
                 <Button
                   key={lang}
                   onPress={() => {
-                    setLanguage(lang as keyof typeof languages);
+                    setLanguage(lang);
                     setIsOpen(false);
                   }}
-                  title={languages[lang as keyof typeof languages]}
+                  title={lang.toUpperCase()}
                   variant="primary"
                   size="medium"
                 />

@@ -1,43 +1,30 @@
-import { create } from 'zustand';
-import { Character } from '../types/characters';
+import { create } from "zustand";
+import { Character } from "../types/characters";
+import { Language } from "../types/languages";
 
-export const languages = {
-  en: 'English',
-  pl: 'Polish',
-  es: 'Spanish',
-  fr: 'French',
-  de: 'German',
-  it: 'Italian',
-  pt: 'Portuguese',
-  ru: 'Russian',
-  zh: 'Chinese',
-  ja: 'Japanese',
-  ko: 'Korean',
-  ar: 'Arabic',
-  tr: 'Turkish',
-  hi: 'Hindi',
-} as const;
+export const LANGUAGES = [
+  "en",
+  "es",
+  "fr",
+  "de",
+  "it",
+  "pt",
+  "ja",
+  "ko",
+  "zh",
+] as const;
 
 type StoryStore = {
-  selectedChars: Pick<Character, 'id'>[];
-  selectedType: string;
-  additionalInstructions: string;
-  language: keyof typeof languages;
-  setSelectedChars: (selectedChars: Pick<Character, 'id'>[]) => void;
-  setSelectedType: (selectedType: string) => void;
-  setAdditionalInstructions: (instructions: string) => void;
-  setLanguage: (language: keyof typeof languages) => void;
+  selectedChars: Character[];
+  language: Language;
+  setSelectedChars: (selectedChars: Character[]) => void;
+  setLanguage: (language: Language) => void;
 };
 
 const useStoryStore = create<StoryStore>((set) => ({
   selectedChars: [],
-  selectedType: '',
-  additionalInstructions: '',
-  language: 'en',
+  language: "en",
   setSelectedChars: (selectedChars) => set({ selectedChars }),
-  setSelectedType: (selectedType) => set({ selectedType }),
-  setAdditionalInstructions: (instructions) =>
-    set({ additionalInstructions: instructions }),
   setLanguage: (language) => set({ language }),
 }));
 

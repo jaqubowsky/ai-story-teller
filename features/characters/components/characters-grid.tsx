@@ -13,12 +13,12 @@ type CharactersGridProps = {
 const CharactersGrid = ({ characters }: CharactersGridProps) => {
   const { selectedChars, setSelectedChars } = useStoryStore();
 
-  const handleSelect = (id: string) => {
-    const isSelected = selectedChars.some((char) => char.id === id);
+  const handleSelect = (character: CharacterType) => {
+    const isSelected = selectedChars.some((char) => char.id === character.id);
     setSelectedChars(
       isSelected
-        ? selectedChars.filter((char) => char.id !== id)
-        : [...selectedChars, { id }]
+        ? selectedChars.filter((char) => char.id !== character.id)
+        : [...selectedChars, character]
     );
   };
 
@@ -36,7 +36,7 @@ const CharactersGrid = ({ characters }: CharactersGridProps) => {
           ) : (
             <Character
               {...item}
-              onPress={() => handleSelect(item.id)}
+              onPress={() => handleSelect(item)}
               isActive={isActive(item.id)}
             />
           )}
