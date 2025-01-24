@@ -1,4 +1,4 @@
-type languages =
+type Language =
   | "en"
   | "es"
   | "fr"
@@ -21,7 +21,7 @@ type Character = {
 type userPromptTypes = {
   characters: Omit<Character[], "id">;
   storyType: string;
-  language: languages;
+  language: Language;
   additionalInstructions: string;
 };
 
@@ -81,9 +81,9 @@ Selected Characters: Include the following characters in the story, ensuring the
   characters.map((character, index: number) =>
     `Character ${index + 1}:
     Name: ${character.name}
-    Age: ${character.age ?? "Unknown"}
-    Interests: ${character.interests ?? "None"}
-    Gender: ${character.gender ?? "Unspecified"}`
+    Age: ${character.age || "Unknown"}
+    Interests: ${character.interests || "None"}
+    Gender: ${character.gender || "Unspecified"}`
   ).join("\n\n")
 }
 
