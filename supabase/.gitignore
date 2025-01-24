@@ -5,3 +5,8 @@
 migrations
 config.toml
 dump-data.sql
+
+# Supabase
+.branches
+.temp
+.env
