@@ -1,5 +1,5 @@
-import { supabase } from '@/supabase';
-import * as SecureStore from 'expo-secure-store';
+import { supabase } from "@/supabase";
+import * as SecureStore from "expo-secure-store";
 import {
   ReactNode,
   createContext,
@@ -7,7 +7,7 @@ import {
   useContext,
   useEffect,
   useState,
-} from 'react';
+} from "react";
 
 const defaultSession = {
   signOut: () => {},
@@ -22,7 +22,7 @@ export const useSession = () => {
   const context = useContext(SessionContext);
 
   if (context === undefined) {
-    throw new Error('useSession must be used within a SessionProvider');
+    throw new Error("useSession must be used within a SessionProvider");
   }
 
   return context;
@@ -38,7 +38,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
         setIsLoading(true);
         setIsLoggedIn(!!session);
         await SecureStore.setItemAsync(
-          'isAuthenticated',
+          "isAuthenticated",
           (!!session).toString()
         );
         setIsLoading(false);
@@ -51,7 +51,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const signOut = useCallback(async () => {
-    await SecureStore.deleteItemAsync('isAuthenticated');
+    await SecureStore.deleteItemAsync("isAuthenticated");
     setIsLoggedIn(false);
 
     supabase.auth.signOut();

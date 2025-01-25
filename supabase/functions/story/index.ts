@@ -32,12 +32,12 @@ Deno.serve(async (req) => {
   if (!authHeader) return new Response("msg_unauthorized", { status: 401 });
 
   const openai = new OpenAI({
-    apiKey: Deno.env.get("OPENAI_API_KEY"),
+    apiKey: Deno.env.get("EDGE_OPENAI_API_KEY"),
   });
 
   const supabaseClient = createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_ANON_KEY")!,
+    Deno.env.get("EDGE_SUPABASE_URL")!,
+    Deno.env.get("EDGE_SUPABASE_ANON_KEY")!,
     { global: { headers: { Authorization: authHeader } } },
   );
 

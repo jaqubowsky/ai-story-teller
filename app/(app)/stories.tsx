@@ -29,7 +29,7 @@ export default function StoriesScreen() {
           ) : null}
           {!isLoading && data.data.length
             ? data.data.map((story, index) => (
-                <StoryPreview {...story} key={index} />
+                <StoryPreview status={story.status} title={story.title} key={index} />
               ))
             : null}
         </Reanimated.View>
