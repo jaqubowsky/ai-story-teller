@@ -1,10 +1,28 @@
-import StoryPreview from '@/features/stories/components/story-preview';
-import { useGetStories } from '@/features/stories/mutations/story';
-import Background from '@/shared/components/background';
-import { WandIcon } from 'lucide-react-native';
-import React from 'react';
-import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
-import Reanimated, { FadeIn } from 'react-native-reanimated';
+import StoryPreview from "@/features/stories/components/story-preview";
+import { useGetStories } from "@/features/stories/mutations/story";
+import Background from "@/shared/components/background";
+import { WandIcon } from "lucide-react-native";
+import React from "react";
+import { ActivityIndicator, ScrollView, Text, View } from "react-native";
+import Reanimated, { FadeIn } from "react-native-reanimated";
+
+const mockData = [
+  {
+    id: "1",
+    status: "COMPLETED",
+    title: "The Magical Story",
+  },
+  {
+    id: "2",
+    status: "GENERATING",
+    title: "The Magical Story",
+  },
+  {
+    id: "3",
+    status: "FAILED",
+    title: "The Magical Story",
+  }
+]
 
 export default function StoriesScreen() {
   const { data, isLoading } = useGetStories();
@@ -27,9 +45,14 @@ export default function StoriesScreen() {
           {isLoading && !data.data.length ? (
             <ActivityIndicator color="#a855f7" />
           ) : null}
-          {!isLoading && data.data.length
-            ? data.data.map((story, index) => (
-                <StoryPreview status={story.status} title={story.title} key={index} />
+          {!isLoading && mockData.length
+            ? mockData.map((story, index) => (
+                <StoryPreview
+                  id={story.id}
+                  status={story.status}
+                  title={story.title}
+                  key={index}
+                />
               ))
             : null}
         </Reanimated.View>

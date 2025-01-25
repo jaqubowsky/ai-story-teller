@@ -3,5 +3,5 @@ export type Story = {
   title: string;
   description: string;
   content: string;
-  status: "GENERATING" | "COMPLETED";
+  status: "GENERATING" | "COMPLETED" | "FAILED";
 };

@@ -1,13 +1,11 @@
 import { supabase } from "@/supabase";
-import {
-  createStorySchema,
-  createStoryType,
-} from "../schemas/create-story-schema";
+import { createStorySchema } from "../schemas/create-story-schema";
+import { deleteStorySchema } from "../schemas/delete-story-schema";
 import { Story } from "../types/story";
 
 const API_URL = process.env.EXPO_PUBLIC_SUPABASE_URL + "/functions/v1";
 
-export const createStory = async (unsafeData: createStoryType) => {
+export const createStory = async (unsafeData: unknown) => {
   const { data: sessionData } = await supabase.auth.getSession();
   if (!sessionData.session) throw new Error("User not authenticated");
 
@@ -45,5 +43,22 @@ export const getStories = async (): Promise<{
   return {
     data: stories,
     message: "Stories fetched successfully",
+  };
+};
+
+export const deleteStory = async (unsafeData: unknown) => {
+  const { data: sessionData } = await supabase.auth.getSession();
+  if (!sessionData.session) throw new Error("User not authenticated");
+
+  const { success, data: storyId } = deleteStorySchema.safeParse(unsafeData);
+  if (!success) throw new Error("Invalid data provided. Please try again.");
+
+  const { error } = await supabase.from("stories").delete().match({
+    id: storyId,
+  });
+  if (error) throw new Error("Error deleting story");
+
+  return {
+    message: "Story deleted successfully",
   };
 };
