@@ -6,24 +6,6 @@ import {
 } from "../_shared/prompts/generate-story/index.ts";
 import { Status, Story } from "../_shared/types/story.ts";
 
-class StoryGenerationEvent extends Event {
-  readonly taskPromise: Promise<void>;
-  constructor(taskPromise: Promise<void>) {
-    super("storyGeneration");
-    this.taskPromise = taskPromise;
-  }
-}
-
-globalThis.addEventListener("storyGeneration", (event) => {
-  const taskPromise = (event as StoryGenerationEvent).taskPromise;
-
-  taskPromise.then(
-    () => console.log("Story generation task completed successfully."),
-  ).catch((err) => {
-    console.error("Background task error:", err);
-  });
-});
-
 Deno.serve(async (req) => {
   const authHeader = req.headers.get("Authorization");
   const expectedToken = `Bearer ${Deno.env.get("EDGE_AUTH_TOKEN")}`;
@@ -37,9 +19,11 @@ Deno.serve(async (req) => {
   );
   const openai = new OpenAI({
     apiKey: Deno.env.get("EDGE_OPENAI_API_KEY")!,
+    maxRetries: 2,
+    timeout: 75_000, // half of the acceptable time using supabase free tier
   });
 
-  const batchSize = 5;
+  const batchSize = 2;
   const { data: stories, error: claimError } = await supabaseClient.rpc(
     "claim_queued_stories",
     { batch_size: batchSize },
@@ -55,8 +39,8 @@ Deno.serve(async (req) => {
     return new Response("No stories to process", { status: 200 });
   }
 
-  (stories as Story[]).forEach((story) => {
-    const taskPromise = (async () => {
+  const storyPromises = (stories as Story[]).map((story) => {
+    return (async () => {
       try {
         const systemPrompt = getSystemPrompt();
         const userPrompt = getUserPrompt({
@@ -107,10 +91,10 @@ Deno.serve(async (req) => {
           .eq("id", story.id);
       }
     })();
-
-    const eventObj = new StoryGenerationEvent(taskPromise);
-    globalThis.dispatchEvent(eventObj);
   });
 
-  return new Response("msg_stories_proceeded", { status: 200 });
+  // @ts-ignore not found in supabase edge function
+  EdgeRuntime.waitUntil(storyPromises);
+
+  return new Response("msg_stories_generation_started", { status: 200 });
 });
