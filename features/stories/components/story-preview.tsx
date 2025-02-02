@@ -74,7 +74,7 @@ const StoryPreview = ({
   };
 
   return (
-    <View className="w-[48%] relative bg-white rounded-lg p-2 justify-center items-center">
+    <View className="w-[48%] relative bg-white rounded-lg p-2 justify-start items-center">
       <Button
         icon={<Trash2 size={24} color="red" />}
         size="small"

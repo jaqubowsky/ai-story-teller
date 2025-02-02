@@ -55,6 +55,7 @@ export const useGetStories = () => {
     queryKey: [mutationKeys.GET_STORIES],
     queryFn: async () => await getStories(),
     initialData: { data: [], message: "" },
+    refetchOnWindowFocus: true,
     refetchInterval: (data) =>
       data.state.data?.data.some((story: Story) =>
           story.status === Status.GENERATING || story.status === Status.QUEUED
