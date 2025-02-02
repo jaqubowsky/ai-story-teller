@@ -1,7 +1,12 @@
 import { mutationKeys } from "@/data/mutation-keys";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createStory, deleteStory, getStories } from "../server/story";
-import { Story } from "../types/story";
+import {
+  createStory,
+  deleteStory,
+  getStories,
+  retryStory,
+} from "../server/story";
+import { Status, Story } from "../types/story";
 
 export const useCreateStory = () => {
   const queryClient = useQueryClient();
@@ -31,6 +36,20 @@ export const useDeleteStory = () => {
   });
 };
 
+export const useRetryStory = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: [mutationKeys.DELETE_STORY],
+    mutationFn: async (unsafeData: unknown) => await retryStory(unsafeData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [mutationKeys.GET_STORIES],
+      });
+    },
+  });
+};
+
 export const useGetStories = () => {
   return useQuery({
     queryKey: [mutationKeys.GET_STORIES],
@@ -38,7 +57,7 @@ export const useGetStories = () => {
     initialData: { data: [], message: "" },
     refetchInterval: (data) =>
       data.state.data?.data.some((story: Story) =>
-          story.status === "GENERATING"
+          story.status === Status.GENERATING || story.status === Status.QUEUED
         )
         ? 1000
         : false,

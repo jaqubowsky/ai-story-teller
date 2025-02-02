@@ -1,22 +1,4 @@
-type Language =
-  | "en"
-  | "es"
-  | "fr"
-  | "de"
-  | "it"
-  | "pt"
-  | "ja"
-  | "ko"
-  | "zh"
-  | "ru";
-
-type Character = {
-  id: string;
-  name: string;
-  age?: number;
-  gender?: "male" | "female";
-  interests?: string;
-};
+import { Character, Language } from "../../types/story.ts";
 
 type userPromptTypes = {
   characters: Omit<Character[], "id">;

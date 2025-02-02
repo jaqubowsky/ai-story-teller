@@ -1,7 +1,7 @@
-import Button from '@/shared/components/button';
-import { Controller, UseFormReturn } from 'react-hook-form';
-import { Text, TextInput, View } from 'react-native';
-import { createStoryTypeForm } from '../schemas/create-story-schema';
+import Button from "@/shared/components/button";
+import { Controller, UseFormReturn } from "react-hook-form";
+import { Text, TextInput, View } from "react-native";
+import { createStoryTypeForm } from "../schemas/create-story-schema";
 
 type AdditionalInstructionsStepProps = {
   form: UseFormReturn<createStoryTypeForm>;
@@ -20,12 +20,13 @@ const AdditionalInstructionsStep = ({
       <Controller
         control={form.control}
         name="additionalInstructions"
-        render={({ field }) => (
+        render={({ field: { onChange, value } }) => (
           <TextInput
-            {...field}
             placeholder="Type your instructions here..."
             className="bg-white text-black p-4 rounded-lg"
             multiline
+            value={value}
+            onChangeText={onChange}
           />
         )}
       />

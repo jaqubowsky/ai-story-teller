@@ -2,7 +2,7 @@ import Button from '@/shared/components/button';
 import { cn } from '@/shared/lib/twMerge';
 import { Controller, UseFormReturn } from 'react-hook-form';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { createStoryType, createStoryTypeForm } from '../schemas/create-story-schema';
+import { createStoryTypeForm } from '../schemas/create-story-schema';
 
 export const STORY_TYPES = [
   'Adventure',

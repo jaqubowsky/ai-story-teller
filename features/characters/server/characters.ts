@@ -14,7 +14,7 @@ export const createCharacter = async (unsafeData: createCharacterType) => {
 
   const { error } = await supabase
     .from("characters")
-    .insert({ ...data, profile: sessionData.session?.user.id });
+    .insert({ ...data, author: sessionData.session?.user.id });
 
   if (error) throw new Error("Error creating character");
 
